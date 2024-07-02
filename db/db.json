@@ -65,17 +65,52 @@
   },
   "status": [
     {
-      "id": 1,
+      "id": "1",
       "tipo": "Solicitado"
     },
     {
-      "id": 2,
+      "id": "2",
       "tipo": "Em produção"
     },
     {
-      "id": 3,
+      "id": "3",
       "tipo": "Finalizado"
     }
   ],
-  "burgers": []
+  "burgers": [
+    {
+      "id": "ba85",
+      "nome": "Matheus",
+      "carne": "Maminha",
+      "pao": "Italiano Branco",
+      "opcionais": [
+        "Bacon",
+        "Cheddar"
+      ],
+      "status": "Solicitado"
+    },
+    {
+      "id": "cbfb",
+      "name": "jessica",
+      "bread": "Integral",
+      "meat": "Alcatra",
+      "optional": [
+        "Salame",
+        "Pepino"
+      ],
+      "status": "Solicitado"
+    },
+    {
+      "id": "82fc",
+      "name": "Pedro",
+      "bread": "Parmesão e Orégano",
+      "meat": "Veggie burger",
+      "optional": [
+        "Tomate",
+        "Pepino",
+        "Cebola roxa"
+      ],
+      "status": "Solicitado"
+    }
+  ]
 }
