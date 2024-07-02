@@ -1,21 +1,22 @@
 <template>
-  <div class="container">
-    <Banner/>
-    <h1>Monte o seu lanche:</h1>
-    <Form/>
+  <div>
+    <Banner />
+    <div class="main-container">
+      <h1>Monte o seu burger:</h1>
+      <BurgerForm />
+    </div>
   </div>
 </template>
 
 <script>
-import Banner from "@/components/Banner.vue";
-import Form from "@/components/Form.vue";
+import Banner from '../components/Banner'
+import BurgerForm from '../components/BurgerForm'
 
 export default {
   name: 'Home',
-  components: {Form, Banner},
+  components: {
+    Banner,
+    BurgerForm
+  }
 }
 </script>
-
-<style>
-
-</style>
