@@ -12,11 +12,6 @@
     box-sizing: border-box;
   }
 
-  .container {
-    margin: 50px;
-    min-height: 250px;
-  }
-
   h1 {
     text-align: center;
     font-size: 42px;
