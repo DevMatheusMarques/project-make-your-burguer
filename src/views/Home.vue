@@ -2,16 +2,17 @@
   <div class="container">
     <Banner/>
     <h1>Monte o seu lanche:</h1>
-    <p>Formulário</p>
+    <Form/>
   </div>
 </template>
 
 <script>
 import Banner from "@/components/Banner.vue";
+import Form from "@/components/Form.vue";
 
 export default {
   name: 'Home',
-  components: {Banner},
+  components: {Form, Banner},
 }
 </script>
 
