@@ -1,6 +1,33 @@
 <script>
 export default {
-  name: "Form"
+  name: "Form",
+  data() {
+    return {
+      breads: null,
+      meats: null,
+      optionaldata: null,
+      name: null,
+      bread: null,
+      meat: null,
+      optional: [],
+      status: "Solicitado",
+      msg: null
+    }
+  },
+  methods: {
+    async getIngredients() {
+      const req = await fetch("http://localhost:3000/ingredientes");
+      const data = await req.json();
+
+      this.breads = data.paes;
+      this.meats = data.carnes;
+      this.optionaldata = data.opcionais;
+
+    }
+  },
+  mounted() {
+    this.getIngredients();
+  }
 }
 </script>
 
@@ -10,27 +37,29 @@ export default {
     <div class="form">
       <div class="form__input">
         <label for="name">Nome do cliente:</label>
-        <input type="text" name="name" id="name" v-model="nome" placeholder="Digite o nome do cliente">
+        <input type="text" name="name" id="name" v-model="nome" placeholder="Digite o nome do cliente" required>
       </div>
       <div class="form__input">
-        <label for="bread">Escolha o pão:</label>
-        <select name="bread" id="bread" v-model="bread">
-          <option value="">Selecione o tipo de pão</option>
+        <label for="bread">Escolha o tipo de pão:</label>
+        <select name="bread" id="bread" v-model="bread" required>
           <option value=""></option>
+          <option v-for="bread in breads" :key="bread.id" :value="bread.tipo">
+            {{bread.tipo}}
+          </option>
         </select>
       </div>
       <div class="form__input">
-        <label for="meat">Escolha a carne:</label>
-        <select name="meat" id="bread" v-model="meat">
-          <option value="">Selecione o tipo de carne</option>
+        <label for="meat">Escolha o tipo de carne:</label>
+        <select name="meat" id="bread" v-model="meat" required>
           <option value=""></option>
+          <option v-for="meat in meats" :key="meat.id" :value="meat.tipo">{{meat.tipo}}</option>
         </select>
       </div>
       <div class="form__input form__input-optional">
         <label for="optional" class="form__input-title">Selecione os opcionais:</label>
-        <div class="form__input-checkbox">
-          <input type="checkbox" name="optional" id="optional" v-model="optional" value="">
-          <span>teste</span>
+        <div class="form__input-checkbox" v-for="optional in optionaldata" :key="optional.id" aria-required="true">
+          <input type="checkbox" name="optionals" v-model="optionals" :value="optional.tipo">
+          <span>{{ optional.tipo }}</span>
         </div>
       </div>
       <div class="form__input">
