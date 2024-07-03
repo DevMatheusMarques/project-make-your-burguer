@@ -34,77 +34,83 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-  name: "BurgerForm",
+  name: "Dashboard",
   data() {
     return {
-      paes: null,
-      carnes: null,
-      opcionaisdata: null,
-      nome: null,
-      pao: null,
-      carne: null,
-      opcionais: [],
-      status: "Solicitado",
-      msg: null
+      burgers: null,
+      status: []
     }
   },
   methods: {
-    async getIngredientes() {
-      const req = await fetch("https://api-burger-rho.vercel.app/ingredientes")
-      const data = await req.json()
-
-      this.paes = data.paes
-      this.carnes = data.carnes
-      this.opcionaisdata = data.opcionais
-    },
-    async createBurger(e) {
-
-      e.preventDefault()
-
-      const data = {
-        nome: this.nome,
-        carne: this.carne,
-        pao: this.pao,
-        opcionais: Array.from(this.opcionais),
-        status: "Solicitado"
+    async getPedidos() {
+      try {
+        const response = await axios.get("https://your-api-domain.com/burgers");
+        this.burgers = response.data;
+        this.getStatus();
+      } catch (error) {
+        console.error('Error fetching burgers:', error);
+        this.$swal({
+          position: "center",
+          icon: "error",
+          title: "Falha ao acessar dados!",
+          showConfirmButton: false,
+          timer: 1500
+        });
       }
-
-      const dataJson = JSON.stringify(data)
-
-      const req = await fetch("https://api-burger-rho.vercel.app/burgers", {
-        method: "POST",
-        headers: { "Content-Type" : "application/json" },
-        body: dataJson
-      });
-
-      const res = await req.json()
-
-      console.log(res)
-
-      this.$swal({
-        position: "center",
-        icon: "success",
-        title: "Pedido realizado com sucesso!",
-        showConfirmButton: false,
-        timer: 1500
-      });
-
-      // clear message
-      setTimeout(() => this.msg = "", 3000)
-
-      // limpar campos
-      this.nome = ""
-      this.carne = ""
-      this.pao = ""
-      this.opcionais = []
-
-    }
+    },
+    async getStatus() {
+      try {
+        const response = await axios.get("https://your-api-domain.com/status");
+        this.status = response.data;
+      } catch (error) {
+        console.error('Error fetching status:', error);
+      }
+    },
+    async deleteBurger(id) {
+      try {
+        await axios.delete(`https://your-api-domain.com/burgers/${id}`);
+        this.$swal(
+            'Cancelado!',
+            'Pedido cancelado com sucesso!',
+            'success'
+        );
+        this.getPedidos();
+      } catch (error) {
+        console.error('Error deleting burger:', error);
+        this.$swal({
+          position: "center",
+          icon: "error",
+          title: "Erro ao cancelar pedido!",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+    },
+    async updateBurger(event, id) {
+      const option = event.target.value;
+      try {
+        await axios.patch(`https://your-api-domain.com/burgers/${id}`, { status: option });
+        console.log('Pedido atualizado com sucesso!');
+      } catch (error) {
+        console.error('Error updating burger:', error);
+        this.$swal({
+          position: "center",
+          icon: "error",
+          title: "Erro ao atualizar pedido!",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+    },
   },
-  mounted () {
-    this.getIngredientes()
-  },
+  mounted() {
+    this.getPedidos();
+  }
 }
+
 </script>
 
 <style scoped>
