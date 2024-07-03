@@ -1,20 +1,20 @@
 <template>
   <div>
-    <form id="burger-form" method="POST" @submit="createBurger">
+    <form id="burger-form" @submit="createBurger">
       <div class="input-container">
         <label for="nome">Nome do cliente:</label>
-        <input type="text" id="nome" name="nome" v-model="nome" placeholder="Digite o seu nome">
+        <input type="text" id="nome" name="nome" v-model="nome" placeholder="Digite o seu nome" required>
       </div>
       <div class="input-container">
         <label for="pao">Escolha o pão:</label>
-        <select name="pao" id="pao" v-model="pao">
+        <select name="pao" id="pao" v-model="pao" required>
           <option value=""></option>
           <option v-for="pao in paes" :key="pao.id" :value="pao.tipo">{{ pao.tipo }}</option>
         </select>
       </div>
       <div class="input-container">
         <label for="carne">Escolha a carne do seu Burger:</label>
-        <select name="carne" id="carne" v-model="carne">
+        <select name="carne" id="carne" v-model="carne" required>
           <option value=""></option>
           <option v-for="carne in carnes" :key="carne.id" :value="carne.tipo">{{ carne.tipo }}</option>
         </select>
@@ -37,80 +37,79 @@
 import axios from 'axios';
 
 export default {
-  name: "Dashboard",
+  name: "BurgerForm",
   data() {
     return {
-      burgers: null,
-      status: []
+      paes: null,
+      carnes: null,
+      opcionaisdata: null,
+      nome: null,
+      pao: null,
+      carne: null,
+      opcionais: [],
+      status: "Solicitado",
     }
   },
   methods: {
-    async getPedidos() {
+    async getIngredientes() {
       try {
-        const response = await axios.get("https://your-api-domain.com/burgers");
-        this.burgers = response.data;
-        this.getStatus();
+        const response = await axios.get("https://api-burger-rho.vercel.app/ingredientes");
+        const data = response.data;
+
+        this.paes = data.paes;
+        this.carnes = data.carnes;
+        this.opcionaisdata = data.opcionais;
       } catch (error) {
-        console.error('Error fetching burgers:', error);
+        console.error('Error fetching ingredientes:', error);
+      }
+    },
+    async createBurger(e) {
+      e.preventDefault();
+
+      const data = {
+        nome: this.nome,
+        pao: this.pao,
+        carne: this.carne,
+        opcionais: Array.from(this.opcionais),
+        status: "Solicitado"
+      };
+
+      try {
+        const response = await axios.post("https://api-burger-rho.vercel.app/burgers", data, {
+          headers: {"Content-Type": "application/json"}
+        });
+
+        console.log(response.data);
+
+        this.$swal({
+          position: "center",
+          icon: "success",
+          title: "Pedido realizado com sucesso!",
+          showConfirmButton: false,
+          timer: 2000
+        });
+
+        // limpar campos
+        this.nome = "";
+        this.carne = "";
+        this.pao = "";
+        this.opcionais = [];
+      } catch (error) {
+        console.error('Error creating burger:', error);
         this.$swal({
           position: "center",
           icon: "error",
-          title: "Falha ao acessar dados!",
+          title: "Erro ao realizar o pedido!",
           showConfirmButton: false,
-          timer: 1500
+          timer: 2000,
         });
       }
-    },
-    async getStatus() {
-      try {
-        const response = await axios.get("https://your-api-domain.com/status");
-        this.status = response.data;
-      } catch (error) {
-        console.error('Error fetching status:', error);
-      }
-    },
-    async deleteBurger(id) {
-      try {
-        await axios.delete(`https://your-api-domain.com/burgers/${id}`);
-        this.$swal(
-            'Cancelado!',
-            'Pedido cancelado com sucesso!',
-            'success'
-        );
-        this.getPedidos();
-      } catch (error) {
-        console.error('Error deleting burger:', error);
-        this.$swal({
-          position: "center",
-          icon: "error",
-          title: "Erro ao cancelar pedido!",
-          showConfirmButton: false,
-          timer: 1500
-        });
-      }
-    },
-    async updateBurger(event, id) {
-      const option = event.target.value;
-      try {
-        await axios.patch(`https://your-api-domain.com/burgers/${id}`, { status: option });
-        console.log('Pedido atualizado com sucesso!');
-      } catch (error) {
-        console.error('Error updating burger:', error);
-        this.$swal({
-          position: "center",
-          icon: "error",
-          title: "Erro ao atualizar pedido!",
-          showConfirmButton: false,
-          timer: 1500
-        });
-      }
-    },
+    }
   },
   mounted() {
-    this.getPedidos();
+    this.getIngredientes();
   }
 }
-
 </script>
 
 <style scoped>
