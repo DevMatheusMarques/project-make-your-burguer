@@ -79,15 +79,52 @@
   ],
   "burgers": [
     {
-      "id": "ef0b",
+      "id": "e5c4",
       "nome": "Matheus",
-      "carne": "Alcatra",
-      "pao": "Italiano Branco",
+      "carne": "Maminha",
+      "pao": "Parmesão e Orégano",
       "opcionais": [
         "Bacon",
         "Cheddar"
       ],
-      "status": "Finalizado"
+      "status": "Em produção"
+    },
+    {
+      "id": "87ad",
+      "nome": "Matheus",
+      "carne": "Picanha",
+      "pao": "3 Queijos",
+      "opcionais": [
+        "Bacon",
+        "Cheddar",
+        "Cebola roxa",
+        "Tomate"
+      ],
+      "status": "Solicitado"
+    },
+    {
+      "id": "24b3",
+      "nome": "Matheus",
+      "carne": "Picanha",
+      "pao": "3 Queijos",
+      "opcionais": [
+        "Bacon",
+        "Cheddar",
+        "Cebola roxa",
+        "Tomate"
+      ],
+      "status": "Solicitado"
+    },
+    {
+      "id": "ec05",
+      "nome": "Teste",
+      "carne": "Maminha",
+      "pao": "3 Queijos",
+      "opcionais": [
+        "Bacon",
+        "Cheddar"
+      ],
+      "status": "Solicitado"
     }
   ]
 }

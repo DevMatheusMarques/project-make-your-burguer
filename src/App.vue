@@ -12,6 +12,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 
 export default {
+  name: "App",
   data: function() {
     return {
       logo_src: "/img/logo.png",
@@ -26,6 +27,11 @@ export default {
 </script>
 
 <style>
+  html, body, #app {
+    height: 100%;
+    margin: 0;
+  }
+
   * {
     font-family: Helvetica;
     padding: 0;

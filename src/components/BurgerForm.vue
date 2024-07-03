@@ -85,7 +85,13 @@ export default {
 
       console.log(res)
 
-      this.msg = "Pedido realizado com sucesso!"
+      this.$swal({
+        position: "center",
+        icon: "success",
+        title: "Pedido realizado com sucesso!",
+        showConfirmButton: false,
+        timer: 1500
+      });
 
       // clear message
       setTimeout(() => this.msg = "", 3000)
