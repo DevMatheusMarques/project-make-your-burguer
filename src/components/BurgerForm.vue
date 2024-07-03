@@ -1,5 +1,4 @@
 <template>
-  <Message :msg="msg" v-show="msg" />
   <div>
     <form id="burger-form" method="POST" @submit="createBurger">
       <div class="input-container">
@@ -35,8 +34,6 @@
 </template>
 
 <script>
-import Message from './Message'
-
 export default {
   name: "BurgerForm",
   data() {
@@ -107,9 +104,6 @@ export default {
   mounted () {
     this.getIngredientes()
   },
-  components: {
-    Message
-  }
 }
 </script>
 
