@@ -114,17 +114,6 @@
         "Tomate"
       ],
       "status": "Solicitado"
-    },
-    {
-      "id": "ec05",
-      "nome": "Teste",
-      "carne": "Maminha",
-      "pao": "3 Queijos",
-      "opcionais": [
-        "Bacon",
-        "Cheddar"
-      ],
-      "status": "Solicitado"
     }
   ]
 }
