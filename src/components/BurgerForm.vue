@@ -13,14 +13,14 @@
         </select>
       </div>
       <div class="input-container">
-        <label for="carne">Escolha a carne do seu Burger:</label>
+        <label for="carne">Escolha a carne:</label>
         <select name="carne" id="carne" v-model="carne" required>
           <option value=""></option>
           <option v-for="carne in carnes" :key="carne.id" :value="carne.tipo">{{ carne.tipo }}</option>
         </select>
       </div>
       <div id="opcionais-container" class="input-container">
-        <label id="opcionais-title" for="opcionais">Selecione os opcionais:</label>
+        <label id="opcionais-title" for="opcionais">Escolha os opcionais:</label>
         <div class="checkbox-container" v-for="opcional in opcionaisdata" :key="opcional.id">
           <input type="checkbox" name="opcionais" v-model="opcionais" :value="opcional.tipo" id="checkbox">
           <span>{{ opcional.tipo }}</span>
@@ -113,101 +113,153 @@ export default {
 </script>
 
 <style scoped>
-#burger-form {
-  max-width: 400px;
-  margin: 0 auto;
-}
+  #burger-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
 
-.input-container {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-}
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
 
-label {
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #222;
-  padding: 5px 10px;
-  border-left: 4px solid #fcba03;
-}
+  label {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #222;
+    padding: 5px 10px;
+    border-left: 4px solid #fcba03;
+  }
 
-input, select {
-  padding: 5px 10px;
-  width: 300px;
-  border-radius: 6px;
-  border: 2px solid #222;
-}
+  input, select {
+    padding: 5px 10px;
+    width: 300px;
+    border-radius: 6px;
+    border: 2px solid #222;
+  }
 
-#opcionais-container {
-  flex-direction: row;
-  flex-wrap: wrap;
-}
+  #opcionais-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 
-#opcionais-title {
-  width: 100%;
-}
+  #opcionais-title {
+    width: 100%;
+  }
 
-.checkbox-container {
-  display: flex;
-  align-items: flex-start;
-  width: 50%;
-  margin-bottom: 20px;
-}
+  .checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    width: 50%;
+    margin-bottom: 20px;
+  }
 
-.checkbox-container span,
-.checkbox-container input {
-  width: auto;
-}
+  .checkbox-container span,
+  .checkbox-container input {
+    width: auto;
+  }
 
-.checkbox-container span {
-  margin-left: 6px;
-  font-weight: bold;
-}
+  .checkbox-container span {
+    margin-left: 6px;
+    font-weight: bold;
+  }
 
-/* Estilizar o checkbox */
-input[type="checkbox"] {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #222;
-  border-radius: 4px;
-  position: relative;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
+  /* Estilizar o checkbox */
+  input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #222;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
 
-input[type="checkbox"]:checked {
-  background-color: #fcba03;
-}
+  input[type="checkbox"]:checked {
+    background-color: #fcba03;
+  }
 
-input[type="checkbox"]:checked::before {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 6px;
-  width: 4px;
-  height: 10px;
-  border: solid #fff;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
+  input[type="checkbox"]:checked::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    width: 4px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
 
-.submit-btn {
-  background-color: #fcba03;
-  color: #222;
-  font-weight: bold;
-  border: 2px solid #222;
-  border-radius: 6px;
-  padding: 10px;
-  font-size: 16px;
-  margin: 0 auto;
-  cursor: pointer;
-  transition: .5s;
-}
+  .submit-btn {
+    background-color: #fcba03;
+    color: #222;
+    font-weight: bold;
+    border: 2px solid #222;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: .5s;
+  }
 
-.submit-btn:hover {
-  background-color: #fad162;
-  color: #222;
-}
+  .submit-btn:hover {
+    background-color: #fad162;
+    color: #222;
+  }
+
+  @media (max-width: 480px) {
+    #burger-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+
+    #opcionais-container {
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    #burger-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 380px;
+      margin: 0 auto;
+      font-size: 25px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #222;
+      padding: 5px 10px;
+      border-left: 4px solid #fcba03;
+    }
+
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+
+    #opcionais-container {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
 </style>

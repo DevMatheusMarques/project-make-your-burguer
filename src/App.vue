@@ -40,8 +40,7 @@ export default {
   }
 
   .main-container {
-    margin: 50px;
-    min-height: 250px;
+    margin-top: 5%;
   }
 
   h1 {
@@ -49,5 +48,25 @@ export default {
     font-size: 42px;
     margin-bottom: 30px;
     color: #222;
+  }
+
+  Navbar {
+    width: 100%;
+  }
+
+  Footer {
+
+  }
+
+  @media (max-width: 480px) {
+    .main-container {
+      margin-top: 10%;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .main-container {
+      margin-top: 10%;
+    }
   }
 </style>
