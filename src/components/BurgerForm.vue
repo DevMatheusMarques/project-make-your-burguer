@@ -71,7 +71,8 @@ export default {
         pao: this.pao,
         carne: this.carne,
         opcionais: Array.from(this.opcionais),
-        status: "Solicitado"
+        status: "Solicitado",
+        dataHora: new Date()
       };
 
       try {
