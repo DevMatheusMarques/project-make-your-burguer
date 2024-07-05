@@ -1,70 +1,62 @@
 <template>
-  <div>
-    <table id="burger-table" class="table table-striped table-bordered">
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Cliente</th>
-        <th>Pão</th>
-        <th>Carne</th>
-        <th>Opcionais</th>
-        <th>Data e Hora</th>
-        <th style="text-align: center">Ações</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="burger in burgers" :key="burger.id">
-        <td>{{ burger.id }}</td>
-        <td>{{ burger.nome }}</td>
-        <td>{{ burger.pao }}</td>
-        <td>{{ burger.carne }}</td>
-        <td>
-          <ul>
+  <div id="burger-table" v-if="burgers">
+    <div>
+      <div id="burger-table-heading">
+        <div class="order-id">ID:</div>
+        <div>Cliente:</div>
+        <div>Pão:</div>
+        <div>Carne:</div>
+        <div>Opcionais:</div>
+        <div>Data e Hora:</div>
+        <div>Ações:</div>
+      </div>
+    </div>
+    <div id="burger-table-rows">
+      <div class="burger-table-row" v-for="burger in burgers" :key="burger.id">
+        <div class="order-number">{{ burger.id }}</div>
+        <div>{{ burger.nome }}</div>
+        <div>{{ burger.pao }}</div>
+        <div>{{ burger.carne }}</div>
+        <div>
+          <ul style="margin-left: 20px">
             <li v-for="(opcional, index) in burger.opcionais" :key="index">{{ opcional }}</li>
           </ul>
-        </td>
-        <td>{{ burger.dataHora }}</td>
-        <td style="text-align: center">
+        </div>
+        <div style="text-align: justify">{{ burger.dataHora }}</div>
+        <div>
           <select name="status" class="status" @change="updateBurger($event, burger.id)">
             <option :value="s.tipo" v-for="s in status" :key="s.id" :selected="burger.status == s.tipo">
               {{ s.tipo }}
             </option>
           </select>
           <button class="delete-btn" @click="deleteBurger(burger.id)">Cancelar</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else>
+    <h2>Não há pedidos no momento!</h2>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import $ from 'jquery';
-import 'datatables.net-bs5';
-import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
 export default {
   name: "Dashboard",
   data() {
     return {
-      burgers: [],
-      status: [],
-      dataTable: null,
+      burgers: null,
+      burger_id: null,
+      status: []
     }
   },
   methods: {
     async getPedidos() {
       try {
         const response = await axios.get("https://api-burger-rho.vercel.app/burgers");
-        this.burgers = response.data.map(burger => ({
-          ...burger,
-          dataHora: burger.dataHora || 'N/A'
-        }));
+        this.burgers = response.data;
         await this.getStatus();
-        this.$nextTick(() => {
-          this.initializeDataTable();
-        });
       } catch (error) {
         console.error('Error fetching burgers:', error);
         this.$swal({
@@ -117,22 +109,6 @@ export default {
         console.error('Error updating burger:', error);
       }
     },
-    initializeDataTable() {
-      this.$nextTick(() => {
-        if (this.dataTable) {
-          this.dataTable.destroy();
-        }
-        this.dataTable = $('#burger-table').DataTable({
-          paging: true,
-          searching: true,
-          lengthMenu: [5, 10, 20],
-          order: [[0, 'desc']],
-          language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json'
-          },
-        });
-      });
-    },
   },
   mounted() {
     this.getPedidos();
@@ -141,12 +117,38 @@ export default {
 </script>
 
 <style scoped>
-.table {
+#burger-table {
+  max-width: 90%;
   margin: 0 auto;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.05);
+#burger-table-heading,
+#burger-table-rows,
+.burger-table-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#burger-table-heading {
+  font-weight: bold;
+  padding: 12px;
+  border-bottom: 3px solid #333;
+}
+
+.burger-table-row {
+  width: 100%;
+  padding: 12px;
+  border-bottom: 1px solid #CCC;
+}
+
+#burger-table-heading div,
+.burger-table-row div {
+  width: 15%;
+}
+
+#burger-table-heading .order-id,
+.burger-table-row .order-number {
+  width: 5%;
 }
 
 select {
@@ -172,5 +174,4 @@ select {
   background-color: #FF0000FF;
   color: #fff;
 }
-
 </style>
