@@ -7,6 +7,7 @@
         <div>Pão:</div>
         <div>Carne:</div>
         <div>Opcionais:</div>
+        <div>Data e Hora:</div>
         <div>Ações:</div>
       </div>
     </div>
@@ -17,10 +18,11 @@
         <div>{{ burger.pao }}</div>
         <div>{{ burger.carne }}</div>
         <div>
-          <ul>
+          <ul style="margin-left: 20px">
             <li v-for="(opcional, index) in burger.opcionais" :key="index">{{ opcional }}</li>
           </ul>
         </div>
+        <div style="text-align: justify">{{ burger.dataHora }}</div>
         <div>
           <select name="status" class="status" @change="updateBurger($event, burger.id)">
             <option :value="s.tipo" v-for="s in status" :key="s.id" :selected="burger.status == s.tipo">
@@ -116,7 +118,7 @@ export default {
 
 <style scoped>
 #burger-table {
-  max-width: 1200px;
+  max-width: 90%;
   margin: 0 auto;
 }
 
@@ -141,7 +143,7 @@ export default {
 
 #burger-table-heading div,
 .burger-table-row div {
-  width: 19%;
+  width: 15%;
 }
 
 #burger-table-heading .order-id,

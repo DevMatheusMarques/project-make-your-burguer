@@ -35,6 +35,7 @@
 
 <script>
 import axios from 'axios';
+import { format } from 'date-fns';
 
 export default {
   name: "BurgerForm",
@@ -72,7 +73,7 @@ export default {
         carne: this.carne,
         opcionais: Array.from(this.opcionais),
         status: "Solicitado",
-        dataHora: new Date()
+        dataHora: format(new Date(), 'dd/MM/yyyy HH:mm:ss')
       };
 
       try {
