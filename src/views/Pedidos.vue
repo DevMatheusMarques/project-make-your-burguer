@@ -20,8 +20,5 @@ export default {
 </script>
 
 <style>
-.main-container {
-  width: 90%;
-  margin: 20px auto;
-}
+
 </style>

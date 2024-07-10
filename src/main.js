@@ -6,6 +6,9 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import $ from 'jquery';
 import 'datatables.net-bs5';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap';
 
 const app = createApp(App);
 

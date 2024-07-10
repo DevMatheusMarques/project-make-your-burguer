@@ -4,12 +4,10 @@
     <div>
       <router-view></router-view>
     </div>
-    <Footer />
   </div>
 </template>
 <script>
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import Navbar from './components/Navbar';
 
 export default {
   name: "App",
@@ -21,7 +19,6 @@ export default {
   },
   components: {
     Navbar,
-    Footer
   }
 }
 </script>
@@ -40,7 +37,7 @@ export default {
   }
 
   .main-container {
-    margin-top: 5%;
+    margin-top: 10px;
   }
 
   h1 {
@@ -52,10 +49,6 @@ export default {
 
   Navbar {
     width: 100%;
-  }
-
-  Footer {
-
   }
 
   @media (max-width: 480px) {

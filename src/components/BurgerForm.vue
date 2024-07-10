@@ -21,7 +21,7 @@
       </div>
       <div id="opcionais-container" class="input-container">
         <label id="opcionais-title" for="opcionais">Escolha os opcionais:</label>
-        <div class="checkbox-container" v-for="opcional in opcionaisdata" :key="opcional.id">
+        <div class="checkbox-container" v-for="opcional in opcionaisData" :key="opcional.id">
           <input type="checkbox" name="opcionais" v-model="opcionais" :value="opcional.tipo" id="checkbox">
           <span>{{ opcional.tipo }}</span>
         </div>
@@ -43,7 +43,7 @@ export default {
     return {
       paes: null,
       carnes: null,
-      opcionaisdata: null,
+      opcionaisData: null,
       nome: null,
       pao: null,
       carne: null,
@@ -54,16 +54,19 @@ export default {
   methods: {
     async getIngredientes() {
       try {
-        const response = await axios.get("https://api-burger-rho.vercel.app/ingredientes");
-        const data = response.data;
+        const response = await axios.get("http://localhost:3000/ingredientes");
+        const ingredientes = response.data;
 
-        this.paes = data.paes;
-        this.carnes = data.carnes;
-        this.opcionaisdata = data.opcionais;
+        this.paes = ingredientes.filter(item => item.categoria.toLowerCase() === 'pães');
+        this.carnes = ingredientes.filter(item => item.categoria.toLowerCase() === 'carnes');
+        this.opcionaisData = ingredientes.filter(item => item.categoria.toLowerCase() === 'opcionais');
+
+        console.log(this.paes, this.carnes, this.opcionais);
       } catch (error) {
         console.error('Error fetching ingredientes:', error);
       }
     },
+
     async createBurger(e) {
       e.preventDefault();
 

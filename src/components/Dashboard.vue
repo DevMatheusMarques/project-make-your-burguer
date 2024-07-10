@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <table id="burger-table" class="table table-striped table-bordered">
       <thead>
       <tr>
@@ -24,7 +24,7 @@
           </ul>
         </td>
         <td>{{ burger.dataHora }}</td>
-        <td style="text-align: center">
+        <td style="text-align: center; ">
           <select name="status" class="status" @change="updateBurger($event, burger.id)">
             <option :value="s.tipo" v-for="s in status" :key="s.id" :selected="burger.status == s.tipo">
               {{ s.tipo }}
@@ -62,7 +62,10 @@ export default {
           dataHora: burger.dataHora || 'N/A'
         }));
         await this.getStatus();
-        this.$nextTick(() => {
+        if (this.dataTable) {
+          this.dataTable.clear().rows.add(this.burgers).draw();
+        }
+        await this.$nextTick(() => {
           this.initializeDataTable();
         });
       } catch (error) {
@@ -76,6 +79,7 @@ export default {
         });
       }
     },
+
     async getStatus() {
       try {
         const response = await axios.get("https://api-burger-rho.vercel.app/status");
@@ -84,13 +88,26 @@ export default {
         console.error('Error fetching status:', error);
       }
     },
+
+    async updateBurger(event, id) {
+      const option = event.target.value;
+      const data = { status: option };
+
+      try {
+        const response = await axios.put(`https://api-burger-rho.vercel.app/burgers/${id}`, data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error updating burger:', error);
+      }
+    },
+
     async deleteBurger(id) {
       this.$swal({
         title: 'Você tem certeza que deseja cancelar este pedido?',
         text: 'Você não será capaz de reverter isso!',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#1ba301',
+        confirmButtonColor: '#198754',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sim, cancelar pedido!',
         cancelButtonText: 'Cancelar'
@@ -98,25 +115,22 @@ export default {
         if (result.isConfirmed) {
           try {
             await axios.delete(`https://api-burger-rho.vercel.app/burgers/${id}`);
-            this.$swal('Cancelado!', 'Pedido cancelado com sucesso!', 'success');
-            this.getPedidos();
+            this.$swal({
+              position: "center",
+              icon: "success",
+              title: "Cancelado!",
+              text: "Pedido cancelado com sucesso!",
+              showConfirmButton: false,
+              timer: 2000
+            });
+            await this.getPedidos();
           } catch (error) {
             console.error('Error deleting burger:', error);
           }
         }
       });
     },
-    async updateBurger(event, id) {
-      const option = event.target.value;
-      const data = { status: option };
 
-      try {
-        const response = await axios.patch(`https://api-burger-rho.vercel.app/burgers/${id}`, data);
-        console.log(response.data);
-      } catch (error) {
-        console.error('Error updating burger:', error);
-      }
-    },
     initializeDataTable() {
       this.$nextTick(() => {
         if (this.dataTable) {
@@ -125,11 +139,15 @@ export default {
         this.dataTable = $('#burger-table').DataTable({
           paging: true,
           searching: true,
-          lengthMenu: [5, 10, 20],
+          lengthMenu: [10, 20, 30, 40, 50, 100],
           order: [[0, 'desc']],
           language: {
             url: 'https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json'
           },
+          scrollY: '50vh', // Altura da rolagem vertical
+          scrollCollapse: true,
+          processing: true,
+          responsive: true,
         });
       });
     },
@@ -141,6 +159,11 @@ export default {
 </script>
 
 <style scoped>
+
+.container {
+  width: 90vw;
+}
+
 .table {
   margin: 0 auto;
 }
@@ -150,9 +173,10 @@ export default {
 }
 
 select {
-  padding: 12px 6px;
+  padding: 8.5px 6px;
   margin-right: 12px;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 .delete-btn {
@@ -161,7 +185,7 @@ select {
   font-weight: bold;
   border-radius: 6px;
   border: none;
-  padding: 12px 12px;
+  padding: 7px 12px;
   font-size: 16px;
   margin: 0 auto;
   cursor: pointer;
@@ -169,7 +193,7 @@ select {
 }
 
 .delete-btn:hover {
-  background-color: #FF0000FF;
+  background-color: #dd0101;
   color: #fff;
 }
 

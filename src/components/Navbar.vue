@@ -4,6 +4,7 @@
       <router-link id="logo-url" to="/">
         <img id="logo" :src="logo" :alt="alt">
       </router-link>
+      <router-link to="/Ingredientes">Ingredientes</router-link>
       <router-link to="/">Fazer Pedido</router-link>
       <router-link to="/pedidos">Pedidos</router-link>
     </div>
