@@ -120,12 +120,9 @@ export default {
   methods: {
     async getIngredientes() {
       try {
-        const response = await axios.get("http://localhost:3000/ingredientes");
+        const response = await axios.get("https://api-burger-rho.vercel.app/ingredientes");
         this.ingredientes = [
           ...response.data
-          // ...response.data.categorias.paes,
-          // ...response.data.categorias.carnes,
-          // ...response.data.categorias.opcionais
         ];
         if (this.dataTable) {
           this.dataTable.clear().rows.add(this.ingredientes).draw();
@@ -156,10 +153,9 @@ export default {
       };
 
       try {
-        const categoria = this.ingredienteCategoria.toLowerCase(); // Categoria do ingrediente
         console.log('Data to be sent:', data); // Loga os dados a serem enviados
 
-        const response = await axios.post("http://localhost:3000/ingredientes", data, {
+        const response = await axios.post("https://api-burger-rho.vercel.app/ingredientes", data, {
           headers: { "Content-Type": "application/json" }
         });
 
@@ -205,7 +201,7 @@ export default {
           categoria: this.selectedIngrediente.categoria
         };
         console.log([id, data]);
-        await axios.put(`http://localhost:3000/ingredientes/${id}`, data);
+        await axios.put(`https://api-burger-rho.vercel.app/ingredientes/${id}`, data);
         $('#editModal').modal('hide');
         this.$swal('Atualizado!', 'Ingrediente atualizado com sucesso!', 'success');
         await this.getIngredientes();
@@ -227,7 +223,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await axios.delete(`http://localhost:3000/ingredientes/${id}`);
+            await axios.delete(`https://api-burger-rho.vercel.app/ingredientes/${id}`);
             this.$swal({
               position: "center",
               icon: "success",
@@ -279,6 +275,7 @@ export default {
           scrollCollapse: true,
           processing: true,
           responsive: true,
+          InfoFiltered: true
         });
       });
     },
