@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <div class="container">
-      <button type="button" class="btn bg-black text-white mb-5" @click="openInsertModal">Adicionar Ingrediente</button>
+      <button type="button" class="btn ingredient-btn mb-5" @click="openInsertModal">Adicionar Novo Ingrediente</button>
       <table id="ingredientes-table" class="table table-striped table-bordered">
         <thead>
         <tr>
@@ -104,6 +104,16 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap';
 import 'datatables.net-bs5';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'datatables.net-buttons-bs5';
+import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
+import jszip from 'jszip';
+import pdfmake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import 'datatables.net-buttons/js/buttons.html5';
+import 'datatables.net-buttons/js/buttons.print';
+import 'datatables.net-buttons/js/buttons.colVis';
+
+pdfmake.vfs = pdfFonts.pdfMake.vfs;
 
 export default {
   name: "IngredientsRegistered",
@@ -128,9 +138,27 @@ export default {
           this.dataTable.clear().rows.add(this.ingredientes).draw();
         }
 
-        this.$nextTick(() => {
+        await this.$nextTick(() => {
           this.initializeDataTable();
         });
+      } catch (error) {
+        console.error('Error fetching ingredientes:', error);
+        this.$swal({
+          position: "center",
+          icon: "error",
+          title: "Falha ao acessar dados!",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+    },
+
+    async updateTable() {
+      try {
+        const response = await axios.get("https://api-burger-rho.vercel.app/ingredientes");
+        this.ingredientes = [
+          ...response.data
+        ];
       } catch (error) {
         console.error('Error fetching ingredientes:', error);
         this.$swal({
@@ -175,7 +203,7 @@ export default {
         this.ingredienteCategoria = "";
 
         // Recarregar tabela
-        await this.getIngredientes();
+        await this.updateTable();
 
         // // Fechar modal
         // this.closeInsertModal();
@@ -204,7 +232,7 @@ export default {
         await axios.put(`https://api-burger-rho.vercel.app/ingredientes/${id}`, data);
         $('#editModal').modal('hide');
         this.$swal('Atualizado!', 'Ingrediente atualizado com sucesso!', 'success');
-        await this.getIngredientes();
+        await this.updateTable();
       } catch (error) {
         console.error('Error updating ingrediente:', error);
       }
@@ -232,12 +260,14 @@ export default {
               showConfirmButton: false,
               timer: 2000
             });
+
+            await this.updateTable();
           } catch (error) {
             console.error('Error deleting ingrediente:', error);
           }
         }
       });
-      await this.getIngredientes();
+
     },
 
     openInsertModal() {
@@ -275,20 +305,83 @@ export default {
           scrollCollapse: true,
           processing: true,
           responsive: true,
-          InfoFiltered: true
+          dom: 'Bfrtip',
+          buttons: [
+            {
+              extend: 'pageLength',
+              text: 'Resultados por Página',
+              className: 'data-btn'
+            },
+            {
+              extend: 'copy',
+              text: 'Copiar Dados',
+              title: 'Ingredientes Cadastrados',
+              className: 'data-btn'
+            },
+            {
+              extend: 'csv',
+              text: 'Exportar CSV', // Texto do botão
+              title: 'Ingredientes Cadastrados', // Título do arquivo CSV
+              filename: 'Ingredientes_Cadastrados', // Nome do arquivo CSV
+              className: 'data-btn'
+            },
+            {
+              extend: 'excel',
+              text: 'Exportar Excel',
+              title: 'Ingredientes Cadastrados',
+              filename: 'Ingredientes_Cadastrados',
+              className: 'data-btn'
+            },
+            {
+              extend: 'pdf',
+              text: 'Exportar PDF',
+              title: 'Ingredientes Cadastrados',
+              filename: 'Ingredientes_Cadastrados',
+              className: 'data-btn'
+            },
+            {
+              extend: 'print',
+              text: 'Imprimir Dados',
+              title: 'Ingredientes Cadastrados',
+              className: 'data-btn'
+            },
+            {
+              extend: 'colvis',
+              text: 'Visibilidade das Colunas',
+              className: 'data-btn'
+
+            },
+          ]
         });
       });
     },
   },
   mounted() {
     this.getIngredientes();
-  }
+  },
 }
 </script>
 
-<style scoped>
+<style>
 .container {
   width: 90vw;
+}
+
+.ingredient-btn {
+  background-color: #fcba03;
+  color: #222;
+  font-weight: bold;
+  border: 2px solid #222;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: .5s;
+}
+
+.ingredient-btn:hover {
+  background-color: #fad162;
+  color: #222;
 }
 
 .table {
@@ -334,4 +427,45 @@ export default {
   background-color: #555;
   color: #fff;
 }
+
+.dt-buttons {
+  width: 70%;
+}
+
+.data-btn {
+  width: 2%;
+  background-color: #222;
+  border: none; /* Remover borda */
+  padding: 10px 10px; /* Espaçamento interno */
+  text-align: center; /* Alinhamento do texto */
+  text-decoration: none; /* Remover sublinhado */
+  display: inline-block; /* Exibir como bloco inline */
+  font-size: 16px; /* Tamanho da fonte */
+  margin: 4px 0px; /* Margens */
+  transition-duration: 0.4s; /* Duração da transição */
+  cursor: pointer; /* Estilo do cursor */
+  border-radius: 8px; /* Borda arredondada */
+}
+
+.dt-search {
+  margin: 20px 20px;
+}
+
+.active>.page-link {
+  background-color: #fcba03;
+  color: #222;
+  border: 2px solid #222;
+}
+
+.page-link {
+  background-color: #FFF;
+  color: #111;
+  margin-bottom: 40px;
+}
+
+.page-link:hover {
+  background-color: #fad162;
+  color: #222;
+}
+
 </style>

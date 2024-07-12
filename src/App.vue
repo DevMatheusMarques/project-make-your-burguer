@@ -38,6 +38,7 @@ export default {
 
   .main-container {
     margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   h1 {
