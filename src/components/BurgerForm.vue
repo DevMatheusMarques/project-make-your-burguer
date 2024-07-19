@@ -54,7 +54,7 @@ export default {
   methods: {
     async getIngredientes() {
       try {
-        const response = await axios.get("http://localhost:3000/ingredientes");
+        const response = await axios.get("https://api-burger-rho.vercel.app/ingredientes");
         const ingredientes = response.data;
 
         this.paes = ingredientes.filter(item => item.categoria.toLowerCase() === 'pães');
