@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="main-container">
-      <h1>Ingredientes Cadastrados:</h1>
       <IngredientsRegistered />
     </div>
   </div>
@@ -20,15 +19,4 @@ export default {
 </script>
 
 <style>
-@media (max-width: 480px) {
-  h1 {
-    margin-top: -20px;
-  }
-}
-
-@media (max-width: 1024px) {
-  h1 {
-    margin-top: -20px;
-  }
-}
 </style>

@@ -30,7 +30,7 @@ export default {
   }
 
   * {
-    font-family: Helvetica;
+    font-family: Helvetica,serif;
     padding: 0;
     margin: 0;
     box-sizing: border-box;

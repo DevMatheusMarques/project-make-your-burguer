@@ -1,7 +1,7 @@
 <template>
-  <div class="main-container">
     <div class="container">
       <button type="button" class="btn ingredient-btn mb-5" @click="openInsertModal">Adicionar Novo Ingrediente</button>
+      <div class="card shadow p-5">
       <table id="ingredientes-table" class="table table-striped table-bordered">
         <thead>
         <tr>
@@ -24,6 +24,7 @@
         </tbody>
       </table>
     </div>
+
 
     <!-- Modal para cadastrar ingrediente -->
     <div class="modal fade" id="insertModal" tabindex="-1" role="dialog" aria-labelledby="insertModalLabel" aria-hidden="true">
@@ -319,13 +320,6 @@ export default {
               className: 'data-btn'
             },
             {
-              extend: 'csv',
-              text: 'Exportar CSV', // Texto do botão
-              title: 'Ingredientes Cadastrados', // Título do arquivo CSV
-              filename: 'Ingredientes_Cadastrados', // Nome do arquivo CSV
-              className: 'data-btn'
-            },
-            {
               extend: 'excel',
               text: 'Exportar Excel',
               title: 'Ingredientes Cadastrados',
@@ -365,6 +359,7 @@ export default {
 <style>
 .container {
   width: 90vw;
+  padding: 1rem 3rem 3rem 3rem;
 }
 
 .ingredient-btn {
@@ -429,22 +424,22 @@ export default {
 }
 
 .dt-buttons {
-  width: 70%;
+  display: flex;
+  align-items: center;
 }
 
 .data-btn {
-  width: 2%;
   background-color: #222;
-  border: none; /* Remover borda */
-  padding: 10px 10px; /* Espaçamento interno */
-  text-align: center; /* Alinhamento do texto */
-  text-decoration: none; /* Remover sublinhado */
-  display: inline-block; /* Exibir como bloco inline */
-  font-size: 16px; /* Tamanho da fonte */
-  margin: 4px 0px; /* Margens */
-  transition-duration: 0.4s; /* Duração da transição */
-  cursor: pointer; /* Estilo do cursor */
-  border-radius: 8px; /* Borda arredondada */
+  border: none;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 0px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 8px;
 }
 
 .dt-search {
@@ -460,12 +455,24 @@ export default {
 .page-link {
   background-color: #FFF;
   color: #111;
-  margin-bottom: 40px;
+
 }
 
 .page-link:hover {
   background-color: #fad162;
   color: #222;
+}
+
+.pagination {
+  padding-top: 1rem;
+}
+
+.first {
+  display: none;
+}
+
+.last {
+  display: none;
 }
 
 </style>
