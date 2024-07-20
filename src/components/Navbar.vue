@@ -2,7 +2,7 @@
   <div id="container">
     <div id="nav">
       <img id="logo" :src="logo" :alt="alt">
-      <router-link v-if="isAuthenticated && isAdmin" to="/Ingredientes" class="router-link">
+      <router-link v-if="isAuthenticated && isAdmin" to="/ingredientes" class="router-link">
         <img src="/icons/ingredientes.svg" alt="Icone Ingredientes" class="icon">
         <span class="link-text">Ingredientes</span>
       </router-link>
@@ -10,7 +10,7 @@
         <img src="/icons/burger-solid.svg" alt="Icone Burguer" class="icon">
         <span class="link-text">Pedidos</span>
       </router-link>
-      <router-link v-if="isAuthenticated && (isAdmin || isWaiter)" to="/" class="router-link">
+      <router-link v-if="isAuthenticated && (isAdmin || isWaiter)" to="/cardapio" class="router-link">
         <img src="/icons/clipboard-list-solid.svg" alt="Icone de Pedido" class="icon" style="position:fixed;">
         <span class="link-text" style="margin-left: 40px">Fazer Pedido</span>
       </router-link>

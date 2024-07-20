@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <button type="button" class="btn ingredient-btn mb-5" @click="openInsertModal">Adicionar Novo Ingrediente</button>
+    <ButtonPrincipal @click="openInsertModal" text="Adicionar Novo Ingrediente" class="mb-5"/>
 
     <!-- Indicador de carregamento -->
     <div v-if="isLoading" class="loading-spinner">
@@ -120,11 +120,13 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import 'datatables.net-buttons/js/buttons.html5';
 import 'datatables.net-buttons/js/buttons.print';
 import 'datatables.net-buttons/js/buttons.colVis';
+import ButtonPrincipal from "@/components/ButtonPrincipal.vue";
 
 pdfmake.vfs = pdfFonts.pdfMake.vfs;
 
 export default {
   name: "IngredientsRegistered",
+  components: {ButtonPrincipal},
   data() {
     return {
       isLoading: false,
@@ -370,23 +372,6 @@ export default {
 .container {
   width: 90vw;
   padding: 1rem 3rem 3rem 3rem;
-}
-
-.ingredient-btn {
-  background-color: #fcba03;
-  color: #222;
-  font-weight: bold;
-  border: 2px solid #222;
-  border-radius: 6px;
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: .5s;
-}
-
-.ingredient-btn:hover {
-  background-color: #fad162;
-  color: #222;
 }
 
 .table {

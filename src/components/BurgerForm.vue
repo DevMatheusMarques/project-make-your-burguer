@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="input-container">
-        <input class="submit-btn" type="submit" value="Finalizar Pedido">
+        <ButtonPrincipal text="Finalizar Pedido"/>
       </div>
     </form>
   </div>
@@ -36,9 +36,11 @@
 <script>
 import axios from 'axios';
 import { format } from 'date-fns';
+import ButtonPrincipal from "@/components/ButtonPrincipal.vue";
 
 export default {
   name: "BurgerForm",
+  components: {ButtonPrincipal},
   data() {
     return {
       paes: null,
@@ -197,23 +199,6 @@ export default {
     border: solid #fff;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
-  }
-
-  .submit-btn {
-    background-color: #fcba03;
-    color: #222;
-    font-weight: bold;
-    border: 2px solid #222;
-    border-radius: 6px;
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: .5s;
-  }
-
-  .submit-btn:hover {
-    background-color: #fad162;
-    color: #222;
   }
 
   @media (max-width: 480px) {
