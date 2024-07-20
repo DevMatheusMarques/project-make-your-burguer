@@ -28,6 +28,7 @@
       background-image: url('/public/img/burger.jpg');
       background-position: 0 -250px;
       background-size: cover;
+      margin-left: 60px;
       height: 500px;
       display: flex;
       align-items: center;

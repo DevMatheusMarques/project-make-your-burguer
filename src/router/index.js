@@ -1,18 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/Home.vue';
+// import Home from '../views/Cardapio.vue';
 import Pedidos from "@/views/Pedidos.vue";
 import Ingredientes from "@/views/Ingredientes.vue";
+import Cardapio from "@/views/Cardapio.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import {jwtDecode} from "jwt-decode";
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home,
-    meta: { requiresAuth: true, roles: ['admin', 'waiter'] }
-  },
   {
     path: '/login',
     name: 'Login',
@@ -22,6 +17,12 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/cardapio',
+    name: 'Cardapio',
+    component: Cardapio,
+    meta: { requiresAuth: true, roles: ['admin', 'waiter'] }
   },
   {
     path: '/pedidos',
