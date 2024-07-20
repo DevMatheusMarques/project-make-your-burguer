@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar :logo="logo_src" :alt="app_name" />
+
     <div>
       <router-view></router-view>
     </div>

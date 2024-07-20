@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Navbar :logo="logo_src" :alt="app_name" />
     <div class="main-container">
       <IngredientsRegistered />
     </div>
@@ -8,10 +9,12 @@
 
 <script>
 import IngredientsRegistered from "@/components/IngredientsRegistered.vue";
+import Navbar from "@/components/Navbar.vue";
 
 export default {
   name: 'Ingredientes',
   components: {
+    Navbar,
     IngredientsRegistered
 
   }

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Navbar :logo="logo_src" :alt="app_name" />
     <Banner />
     <div class="main-container">
       <h1>Informe os dados do pedido:</h1>
@@ -11,10 +12,12 @@
 <script>
 import Banner from '../components/Banner'
 import BurgerForm from '../components/BurgerForm'
+import Navbar from "@/components/Navbar.vue";
 
 export default {
   name: 'Home',
   components: {
+    Navbar,
     Banner,
     BurgerForm
   }
