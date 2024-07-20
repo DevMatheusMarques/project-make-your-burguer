@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '@/axios';
 
 export default {
   data() {
@@ -28,9 +28,9 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axios.post('http://localhost:3000/login', {
+        const response = await axios.post('https://api-burger-rho.vercel.app/login', {
           username: this.username,
-          password: this.password
+          password: this.password,
         });
 
         const user = {
@@ -38,6 +38,9 @@ export default {
           role: response.data.role
         };
         localStorage.setItem('user', JSON.stringify(user));
+
+        this.user = user;
+
         this.$router.push('/');
       } catch (error) {
         this.$swal({
@@ -47,7 +50,6 @@ export default {
           showConfirmButton: false,
           timer: 2500
         });
-        console.error('Failed to login:', error);
       }
     }
   }

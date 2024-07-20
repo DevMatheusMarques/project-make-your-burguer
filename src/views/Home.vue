@@ -16,6 +16,12 @@ import Navbar from "@/components/Navbar.vue";
 
 export default {
   name: 'Home',
+  data: function() {
+    return {
+      logo_src: "/img/logo.png",
+      app_name: "Make Your Burger"
+    }
+  },
   components: {
     Navbar,
     Banner,

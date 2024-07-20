@@ -3,6 +3,8 @@ import Home from '../views/Home.vue';
 import Pedidos from "@/views/Pedidos.vue";
 import Ingredientes from "@/views/Ingredientes.vue";
 import Login from "@/views/Login.vue";
+import Register from "@/views/Register.vue";
+import {jwtDecode} from "jwt-decode";
 
 const routes = [
   {
@@ -15,6 +17,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
   },
   {
     path: '/pedidos',
@@ -41,19 +48,34 @@ router.beforeEach((to, from, next) => {
 
   if (requiresAuth) {
     if (!user || !user.token) {
-      next({ name: 'Login' });
-    } else {
-      const userRole = user.role;
-      const allowedRoles = to.meta.roles;
-
-      if (allowedRoles && allowedRoles.includes(userRole)) {
-        next();
+      // Evita redirecionar para Login se já estiver na página de Login
+      if (to.name !== 'Login') {
+        next({ name: 'Login' });
       } else {
-        next({ name: 'Home' });
+        next(); // Se já estiver na página de Login, apenas prossiga
+      }
+    } else {
+      const userRole = jwtDecode(user.token).role;
+      const allowedRoles = to.meta.roles || [];
+
+      if (allowedRoles.includes(userRole)) {
+        // Evita redirecionar para Home se já estiver na página Home
+        if (to.name === 'Login') {
+          next({ name: 'Home' });
+        } else {
+          next(); // Usuário tem permissão, prossegue normalmente
+        }
+      } else {
+        // Evita redirecionar para Home se já estiver na página Home
+        if (to.name !== 'Home') {
+          next({ name: 'Home' });
+        } else {
+          next(); // Se já estiver na página Home, apenas prossiga
+        }
       }
     }
   } else {
-    next();
+    next(); // Página não requer autenticação, prossiga normalmente
   }
 });
 
