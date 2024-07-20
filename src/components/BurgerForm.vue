@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <form id="burger-form" @submit="createBurger">
       <div class="input-container">
         <label for="nome">Nome do cliente:</label>

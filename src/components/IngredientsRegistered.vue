@@ -1,7 +1,15 @@
 <template>
-    <div class="container">
-      <button type="button" class="btn ingredient-btn mb-5" @click="openInsertModal">Adicionar Novo Ingrediente</button>
-      <div class="card shadow p-5">
+  <div class="container">
+    <button type="button" class="btn ingredient-btn mb-5" @click="openInsertModal">Adicionar Novo Ingrediente</button>
+
+    <!-- Indicador de carregamento -->
+    <div v-if="isLoading" class="loading-spinner">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div class="card shadow p-5" v-if="!isLoading">
       <table id="ingredientes-table" class="table table-striped table-bordered">
         <thead>
         <tr>
@@ -24,7 +32,6 @@
         </tbody>
       </table>
     </div>
-
 
     <!-- Modal para cadastrar ingrediente -->
     <div class="modal fade" id="insertModal" tabindex="-1" role="dialog" aria-labelledby="insertModalLabel" aria-hidden="true">
@@ -120,16 +127,18 @@ export default {
   name: "IngredientsRegistered",
   data() {
     return {
+      isLoading: false,
       ingredientes: [],
       selectedIngrediente: [],
       dataTable: null,
-      ingredienteTipo: [],
-      quantidade: [],
-      ingredienteCategoria: []
+      ingredienteTipo: "",
+      quantidade: "",
+      ingredienteCategoria: ""
     }
   },
   methods: {
     async getIngredientes() {
+      this.isLoading = true;
       try {
         const response = await axios.get("https://api-burger-rho.vercel.app/ingredientes");
         this.ingredientes = [
@@ -139,7 +148,7 @@ export default {
           this.dataTable.clear().rows.add(this.ingredientes).draw();
         }
 
-        await this.$nextTick(() => {
+        this.$nextTick(() => {
           this.initializeDataTable();
         });
       } catch (error) {
@@ -151,6 +160,8 @@ export default {
           showConfirmButton: false,
           timer: 1500
         });
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -185,7 +196,7 @@ export default {
         console.log('Data to be sent:', data); // Loga os dados a serem enviados
 
         const response = await axios.post("https://api-burger-rho.vercel.app/ingredientes", data, {
-          headers: { "Content-Type": "application/json" }
+          headers: {"Content-Type": "application/json"}
         });
 
         console.log('Response data:', response.data); // Loga a resposta recebida
@@ -281,7 +292,7 @@ export default {
     },
 
     openEditModal(ingrediente) {
-      this.selectedIngrediente = { ...ingrediente };
+      this.selectedIngrediente = {...ingrediente};
       $('#editModal').modal('show');
     },
 
@@ -343,7 +354,6 @@ export default {
               extend: 'colvis',
               text: 'Visibilidade das Colunas',
               className: 'data-btn'
-
             },
           ]
         });
@@ -423,56 +433,11 @@ export default {
   color: #fff;
 }
 
-.dt-buttons {
+.loading-spinner {
   display: flex;
+  justify-content: center;
   align-items: center;
-}
-
-.data-btn {
-  background-color: #222;
-  border: none;
-  padding: 10px 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 0px;
-  transition-duration: 0.4s;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
-.dt-search {
-  margin: 20px 20px;
-}
-
-.active>.page-link {
-  background-color: #fcba03;
-  color: #222;
-  border: 2px solid #222;
-}
-
-.page-link {
-  background-color: #FFF;
-  color: #111;
-
-}
-
-.page-link:hover {
-  background-color: #fad162;
-  color: #222;
-}
-
-.pagination {
-  padding-top: 1rem;
-}
-
-.first {
-  display: none;
-}
-
-.last {
-  display: none;
+  height: 50vh;
 }
 
 </style>

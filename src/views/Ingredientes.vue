@@ -19,4 +19,55 @@ export default {
 </script>
 
 <style>
+.dt-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.data-btn {
+  background-color: #222;
+  border: none;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 0px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.dt-search {
+  margin: 20px 20px;
+}
+
+.active>.page-link {
+  background-color: #fcba03;
+  color: #222;
+  border: 2px solid #222;
+}
+
+.page-link {
+  background-color: #FFF;
+  color: #111;
+
+}
+
+.page-link:hover {
+  background-color: #fad162;
+  color: #222;
+}
+
+.pagination {
+  padding-top: 1rem;
+}
+
+.first {
+  display: none;
+}
+
+.last {
+  display: none;
+}
 </style>
