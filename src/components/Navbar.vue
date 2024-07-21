@@ -2,6 +2,10 @@
   <div id="container">
     <div id="nav">
       <img id="logo" :src="logo" :alt="alt">
+      <router-link v-if="isAuthenticated && isAdmin" to="/dashboard" class="router-link">
+        <img src="/icons/house-solid.svg" alt="Icone de Home" class="icon" style="position:fixed;">
+        <span class="link-text" style="margin-left: 40px">Painel de Controle</span>
+      </router-link>
       <router-link v-if="isAuthenticated && isAdmin" to="/ingredientes" class="router-link">
         <img src="/icons/ingredientes.svg" alt="Icone Ingredientes" class="icon">
         <span class="link-text">Ingredientes</span>
@@ -13,10 +17,6 @@
       <router-link v-if="isAuthenticated && (isAdmin || isWaiter)" to="/cardapio" class="router-link">
         <img src="/icons/clipboard-list-solid.svg" alt="Icone de Pedido" class="icon" style="position:fixed;">
         <span class="link-text" style="margin-left: 40px">Fazer Pedido</span>
-      </router-link>
-      <router-link v-if="isAuthenticated && isAdmin" to="/dashboard" class="router-link">
-        <img src="/icons/house-solid.svg" alt="Icone de Home" class="icon" style="position:fixed;">
-        <span class="link-text" style="margin-left: 40px">Dashboard</span>
       </router-link>
       <button v-if="isAuthenticated && (isAdmin || isWaiter)" @click="logout" class="link-exit">
         <img src="/icons/door-open-solid.svg" alt="Icone Saída" class="icon">
@@ -95,7 +95,7 @@ export default {
 }
 
 #nav:hover {
-  width: 200px;
+  width: 220px;
 }
 
 #logo-url {
@@ -112,7 +112,7 @@ export default {
   color: #fcba03;
   text-decoration: none;
   margin: 12px 0;
-  padding-left: 18px;
+  padding-left: 19px;
   display: flex;
   align-items: center;
   transition: color 0.3s;
@@ -164,6 +164,7 @@ export default {
   color: #fcba03;
   text-decoration: none;
   margin: auto 0 12px 0 ;
+  padding-left: 14px;
   display: flex;
   align-items: center;
   transition: color 0.3s;
