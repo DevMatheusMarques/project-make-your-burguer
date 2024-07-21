@@ -178,5 +178,4 @@ export default {
   background-color: #555;
   color: #FFF;
 }
-
 </style>

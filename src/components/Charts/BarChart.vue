@@ -33,7 +33,7 @@ export default defineComponent({
         tooltip: {
           callbacks: {
             label: function (tooltipItem) {
-              return `${tooltipItem.label}: ${tooltipItem.raw}`;
+              return `Pedidos: ${tooltipItem.raw}`;
             }
           }
         }
