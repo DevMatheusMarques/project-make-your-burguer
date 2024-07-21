@@ -3,13 +3,13 @@
     <Navbar :logo="logo_src" :alt="app_name" />
     <div class="main-container">
       <h1>Gerenciar pedidos:</h1>
-      <Dashboard />
+      <RequestsRegistered/>
     </div>
   </div>
 </template>
 
 <script>
-import Dashboard from "@/components/Dashboard.vue";
+import RequestsRegistered from "@/components/RequestsRegistered.vue";
 import Navbar from "@/components/Navbar.vue";
 
 export default {
@@ -22,7 +22,7 @@ export default {
   },
   components: {
     Navbar,
-    Dashboard,
+    RequestsRegistered,
 
   }
 }

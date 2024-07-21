@@ -14,6 +14,10 @@
         <img src="/icons/clipboard-list-solid.svg" alt="Icone de Pedido" class="icon" style="position:fixed;">
         <span class="link-text" style="margin-left: 40px">Fazer Pedido</span>
       </router-link>
+      <router-link v-if="isAuthenticated && isAdmin" to="/dashboard" class="router-link">
+        <img src="/icons/house-solid.svg" alt="Icone de Home" class="icon" style="position:fixed;">
+        <span class="link-text" style="margin-left: 40px">Dashboard</span>
+      </router-link>
       <button v-if="isAuthenticated && (isAdmin || isWaiter)" @click="logout" class="link-exit">
         <img src="/icons/door-open-solid.svg" alt="Icone Saída" class="icon">
         <span class="link-text">Sair</span>

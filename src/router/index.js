@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
-// import Home from '../views/Cardapio.vue';
 import Pedidos from "@/views/Pedidos.vue";
 import Ingredientes from "@/views/Ingredientes.vue";
 import Cardapio from "@/views/Cardapio.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import {jwtDecode} from "jwt-decode";
+import Dashboard from "@/views/Dashboard.vue";
 
 const routes = [
   {
@@ -23,6 +23,12 @@ const routes = [
     name: 'Cardapio',
     component: Cardapio,
     meta: { requiresAuth: true, roles: ['admin', 'waiter'] }
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard,
+    meta: { requiresAuth: true, roles: ['admin'] }
   },
   {
     path: '/pedidos',
@@ -62,14 +68,14 @@ router.beforeEach((to, from, next) => {
       if (allowedRoles.includes(userRole)) {
         // Evita redirecionar para Home se já estiver na página Home
         if (to.name === 'Login') {
-          next({ name: 'Home' });
+          next({ name: 'Dashboard' });
         } else {
           next(); // Usuário tem permissão, prossegue normalmente
         }
       } else {
         // Evita redirecionar para Home se já estiver na página Home
-        if (to.name !== 'Home') {
-          next({ name: 'Home' });
+        if (to.name !== 'Dashboard') {
+          next({ name: 'Dashboard' });
         } else {
           next(); // Se já estiver na página Home, apenas prossiga
         }
