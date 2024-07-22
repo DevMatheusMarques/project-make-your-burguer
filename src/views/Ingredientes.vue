@@ -79,4 +79,8 @@ export default {
 .last {
   display: none;
 }
+
+.dt-info {
+  margin-top: 2rem;
+}
 </style>

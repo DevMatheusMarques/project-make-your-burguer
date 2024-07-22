@@ -330,27 +330,39 @@ export default {
               extend: 'copy',
               text: 'Copiar Dados',
               title: 'Ingredientes Cadastrados',
-              className: 'data-btn'
+              className: 'data-btn',
+              exportOptions: {
+                columns: ':visible:not(:last-child)'
+              }
             },
             {
               extend: 'excel',
               text: 'Exportar Excel',
               title: 'Ingredientes Cadastrados',
-              filename: 'Ingredientes_Cadastrados',
-              className: 'data-btn'
+              filename: 'Ingredientes Cadastrados',
+              className: 'data-btn',
+              exportOptions: {
+                columns: ':visible:not(:last-child)'
+              }
             },
             {
               extend: 'pdf',
               text: 'Exportar PDF',
               title: 'Ingredientes Cadastrados',
-              filename: 'Ingredientes_Cadastrados',
-              className: 'data-btn'
+              filename: 'Ingredientes Cadastrados',
+              className: 'data-btn',
+              exportOptions: {
+                columns: ':visible:not(:last-child)'
+              }
             },
             {
               extend: 'print',
               text: 'Imprimir Dados',
               title: 'Ingredientes Cadastrados',
-              className: 'data-btn'
+              className: 'data-btn',
+              exportOptions: {
+                columns: ':visible:not(:last-child)'
+              }
             },
             {
               extend: 'colvis',
@@ -372,6 +384,7 @@ export default {
 .container {
   width: 90vw;
   padding: 1rem 3rem 3rem 3rem;
+  z-index: 0;
 }
 
 .table {

@@ -92,6 +92,7 @@ export default {
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
+  z-index: 1;
 }
 
 #nav:hover {

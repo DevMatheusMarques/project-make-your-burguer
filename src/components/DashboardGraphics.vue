@@ -195,8 +195,8 @@ export default {
 
 <style scoped>
 .dashboard {
-  margin: 0 200px;
-  padding: 20px 100px;
+  margin: 0 100px;
+  padding: 20px 50px;
 }
 
 .el-card {

@@ -1,40 +1,49 @@
 <template>
   <div class="container">
-    <table id="burger-table" class="table table-striped table-bordered">
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Cliente</th>
-        <th>Pão</th>
-        <th>Carne</th>
-        <th>Opcionais</th>
-        <th>Data e Hora</th>
-        <th style="text-align: center">Ações</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="burger in burgers" :key="burger.id">
-        <td>{{ burger.id }}</td>
-        <td>{{ burger.nome }}</td>
-        <td>{{ burger.pao }}</td>
-        <td>{{ burger.carne }}</td>
-        <td>
-          <ul>
-            <li v-for="(opcional, index) in burger.opcionais" :key="index">{{ opcional }}</li>
-          </ul>
-        </td>
-        <td>{{ burger.dataHora }}</td>
-        <td style="text-align: center; ">
-          <select name="status" class="status" @change="updateBurger($event, burger.id)">
-            <option :value="s.tipo" v-for="s in status" :key="s.id" :selected="burger.status == s.tipo">
-              {{ s.tipo }}
-            </option>
-          </select>
-          <button class="delete-btn" @click="deleteBurger(burger.id)">Cancelar</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+
+    <!-- Indicador de carregamento -->
+    <div v-if="isLoading" class="loading-spinner">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div class="card shadow p-5" v-if="!isLoading">
+      <table id="burger-table" class="table table-striped table-bordered">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Pão</th>
+          <th>Carne</th>
+          <th>Opcionais</th>
+          <th>Data e Hora</th>
+          <th style="text-align: center">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="burger in burgers" :key="burger.id">
+          <td>{{ burger.id }}</td>
+          <td>{{ burger.nome }}</td>
+          <td>{{ burger.pao }}</td>
+          <td>{{ burger.carne }}</td>
+          <td>
+            <ul>
+              <li v-for="(opcional, index) in burger.opcionais" :key="index">{{ opcional }}</li>
+            </ul>
+          </td>
+          <td>{{ burger.dataHora }}</td>
+          <td style="text-align: center; ">
+            <select name="status" class="status" @change="updateBurger($event, burger.id)">
+              <option :value="s.tipo" v-for="s in status" :key="s.id" :selected="burger.status == s.tipo">
+                {{ s.tipo }}
+              </option>
+            </select>
+            <button class="delete-btn" @click="deleteBurger(burger.id)">Cancelar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -43,11 +52,23 @@ import axios from 'axios';
 import $ from 'jquery';
 import 'datatables.net-bs5';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap';
+import 'datatables.net-buttons-bs5';
+import 'datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css';
+import jszip from 'jszip';
+import pdfmake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import 'datatables.net-buttons/js/buttons.html5';
+import 'datatables.net-buttons/js/buttons.print';
+import 'datatables.net-buttons/js/buttons.colVis';
 
 export default {
   name: "Dashboard",
   data() {
     return {
+      isLoading: false,
       burgers: [],
       status: [],
       dataTable: null,
@@ -55,6 +76,7 @@ export default {
   },
   methods: {
     async getPedidos() {
+      this.isLoading = true;
       try {
         const response = await axios.get("https://api-burger-rho.vercel.app/burgers");
         this.burgers = response.data.map(burger => ({
@@ -65,7 +87,7 @@ export default {
         if (this.dataTable) {
           this.dataTable.clear().rows.add(this.burgers).draw();
         }
-        await this.$nextTick(() => {
+        this.$nextTick(() => {
           this.initializeDataTable();
         });
       } catch (error) {
@@ -77,6 +99,8 @@ export default {
           showConfirmButton: false,
           timer: 1500
         });
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -130,7 +154,6 @@ export default {
         }
       });
     },
-
     initializeDataTable() {
       this.$nextTick(() => {
         if (this.dataTable) {
@@ -140,17 +163,68 @@ export default {
           paging: true,
           searching: true,
           lengthMenu: [10, 20, 30, 40, 50, 100],
-          order: [[0, 'desc']],
+          order: [[6, 'desc']],
           language: {
             url: 'https://cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json'
           },
-          scrollY: '50vh', // Altura da rolagem vertical
+          scrollY: '50vh',
           scrollCollapse: true,
           processing: true,
           responsive: true,
+          dom: 'Bfrtip',
+          buttons: [
+            {
+              extend: 'pageLength',
+              text: 'Resultados por Página',
+              className: 'data-btn'
+            },
+            {
+              extend: 'copy',
+              text: 'Copiar Dados',
+              title: 'Pedidos Cadastrados',
+              className: 'data-btn',
+              exportOptions: {
+                columns: ':visible:not(:last-child)'
+              }
+            },
+            {
+              extend: 'excel',
+              text: 'Exportar Excel',
+              title: 'Pedidos Cadastrados',
+              filename: 'Pedidos Cadastrados',
+              className: 'data-btn',
+              exportOptions: {
+                columns: ':visible:not(:last-child)'
+              }
+            },
+            {
+              extend: 'pdf',
+              text: 'Exportar PDF',
+              title: 'Pedidos Cadastrados',
+              filename: 'Pedidos Cadastrados',
+              className: 'data-btn',
+              exportOptions: {
+                columns: ':visible:not(:last-child)'
+              }
+            },
+            {
+              extend: 'print',
+              text: 'Imprimir Dados',
+              title: 'Pedidos Cadastrados',
+              className: 'data-btn',
+              exportOptions: {
+                columns: ':visible:not(:last-child)'
+              }
+            },
+            {
+              extend: 'colvis',
+              text: 'Visibilidade das Colunas',
+              className: 'data-btn'
+            },
+          ]
         });
       });
-    },
+    }
   },
   mounted() {
     this.getPedidos();
@@ -162,6 +236,8 @@ export default {
 
 .container {
   width: 90vw;
+  padding: 1rem 3rem 3rem 3rem;
+  z-index: 0;
 }
 
 .table {
@@ -197,4 +273,10 @@ select {
   color: #fff;
 }
 
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
 </style>

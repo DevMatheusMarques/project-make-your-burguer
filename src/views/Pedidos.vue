@@ -2,7 +2,6 @@
   <div>
     <Navbar :logo="logo_src" :alt="app_name" />
     <div class="main-container">
-      <h1>Gerenciar pedidos:</h1>
       <RequestsRegistered/>
     </div>
   </div>
