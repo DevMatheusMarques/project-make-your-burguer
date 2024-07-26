@@ -6,6 +6,7 @@ import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import {jwtDecode} from "jwt-decode";
 import Dashboard from "@/views/Dashboard.vue";
+import Users from "@/views/Users.vue";
 
 const routes = [
   {
@@ -40,6 +41,12 @@ const routes = [
     path: '/ingredientes',
     name: 'Ingredientes',
     component: Ingredientes,
+    meta: { requiresAuth: true, roles: ['admin'] }
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: Users,
     meta: { requiresAuth: true, roles: ['admin'] }
   }
 ];

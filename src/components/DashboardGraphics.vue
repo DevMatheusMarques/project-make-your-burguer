@@ -62,25 +62,25 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const response = await axios.get('https://api-burger-rho.vercel.app/burgers');
-        const burgers = response.data;
+        const response = await axios.get('https://api-burger-rho.vercel.app/requests');
+        const requests = response.data;
 
-        this.dailyOrdersData = this.formatDataForChart(burgers, 'daily');
-        this.weeklyOrdersData = this.formatDataForChart(burgers, 'weekly');
-        this.monthlyOrdersData = this.formatDataForChart(burgers, 'monthly');
-        this.revenueData = this.calculateRevenue(burgers);
+        this.dailyOrdersData = this.formatDataForChart(requests, 'daily');
+        this.weeklyOrdersData = this.formatDataForChart(requests, 'weekly');
+        this.monthlyOrdersData = this.formatDataForChart(requests, 'monthly');
+        this.revenueData = this.calculateRevenue(requests);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     },
-    formatDataForChart(burgers, period) {
+    formatDataForChart(requests, period) {
       const labels = [];
       const data = [];
 
-      burgers.forEach(burger => {
-        const date = this.parseBrazilianDate(burger.dataHora);
+      requests.forEach(request => {
+        const date = this.parseBrazilianDate(request.dataHora);
         if (!date) {
-          console.error('Invalid date format:', burger.dataHora);
+          console.error('Invalid date format:', request.dataHora);
           return;
         }
 
@@ -118,24 +118,24 @@ export default {
         ]
       };
     },
-    calculateRevenue(burgers) {
+    calculateRevenue(requests) {
       const labels = [];
       const data = [];
 
-      burgers.forEach(burger => {
-        const date = this.parseBrazilianDate(burger.dataHora);
+      requests.forEach(request => {
+        const date = this.parseBrazilianDate(request.dataHora);
         if (!date) {
-          console.error('Invalid date format:', burger.dataHora);
+          console.error('Invalid date format:', request.dataHora);
           return;
         }
 
         const key = this.formatMonthToBrazilian(date);
 
         if (labels.includes(key)) {
-          data[labels.indexOf(key)] += burger.preco || 0;
+          data[labels.indexOf(key)] += request.preco || 0;
         } else {
           labels.push(key);
-          data.push(burger.preco || 0);
+          data.push(request.preco || 0);
         }
       });
 

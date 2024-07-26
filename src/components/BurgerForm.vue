@@ -56,7 +56,7 @@ export default {
   methods: {
     async getIngredientes() {
       try {
-        const response = await axios.get("https://api-burger-rho.vercel.app/ingredientes");
+        const response = await axios.get("https://api-burger-rho.vercel.app/ingredients");
         const ingredientes = response.data;
 
         this.paes = ingredientes.filter(item => item.categoria.toLowerCase() === 'pães');
@@ -82,7 +82,7 @@ export default {
       };
 
       try {
-        const response = await axios.post("https://api-burger-rho.vercel.app/burgers", data, {
+        const response = await axios.post("https://api-burger-rho.vercel.app/requests", data, {
           headers: {"Content-Type": "application/json"}
         });
 

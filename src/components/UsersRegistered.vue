@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <ButtonPrincipal @click="openInsertModal" text="Adicionar Novo Ingrediente" class="mb-5"/>
+    <ButtonPrincipal @click="openInsertModal" text="Adicionar Novo Usuário" class="mb-5"/>
 
     <!-- Indicador de carregamento -->
     <div v-if="isLoading" class="loading-spinner">
@@ -10,66 +10,67 @@
     </div>
 
     <div class="card shadow p-5" v-if="!isLoading">
-      <table id="ingredientes-table" class="table table-striped table-bordered">
+      <table id="users-table" class="table table-striped table-bordered">
         <thead>
         <tr>
-          <th style="text-align: center">Nome do Ingrediente</th>
-          <th style="text-align: center">Quantidade</th>
-          <th style="text-align: center">Categoria</th>
+          <th style="text-align: center">ID</th>
+          <th style="text-align: center">Nome do Usuário</th>
+          <th style="text-align: center">Tipo de Usuário</th>
           <th style="text-align: center">Ações</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="ingrediente in ingredientes" :key="ingrediente.id">
-          <td style="text-align: center">{{ ingrediente.tipo }}</td>
-          <td style="text-align: center">{{ ingrediente.quantidade }}</td>
-          <td style="text-align: center">{{ ingrediente.categoria }}</td>
+        <tr v-for="user in users" :key="user.id">
+          <td style="text-align: center">{{ user.id }}</td>
+          <td style="text-align: center">{{ user.username }}</td>
+          <td style="text-align: center">{{ user.role }}</td>
           <td style="text-align: center;">
-            <button class="update-btn" @click="openEditModal(ingrediente)">Alterar</button>
-            <button class="delete-btn" @click="deleteIngrediente(ingrediente.id, ingrediente.categoria)">Excluir</button>
+            <button class="update-btn" @click="openEditModal(user)">Alterar</button>
+            <button class="delete-btn" @click="deleteIngrediente(user.id, user.categoria)">Excluir</button>
           </td>
         </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Modal para cadastrar ingrediente -->
+    <!-- Modal para cadastrar user -->
     <div class="modal fade" id="insertModal" tabindex="-1" role="dialog" aria-labelledby="insertModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="insertModalLabel">Cadastrar Ingrediente</h5>
+            <h5 class="modal-title" id="insertModalLabel">Cadastrar Usuário</h5>
             <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" @click="closeInsertModal"></button>
           </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label for="ingredienteTipo">Nome do Ingrediente</label>
-              <input type="text" id="ingredienteTipo" name="tipo" v-model="ingredienteTipo" class="form-control" placeholder="Digite o nome do ingrediente" required>
+          <form @submit.prevent="registerUser">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="userTipo">Nome do Usuário</label>
+                <input type="text" id="userName" name="userName" v-model="username" class="form-control" placeholder="Digite o nome do user" required>
+              </div>
+              <div class="form-group">
+                <label for="userQuantidade">Senha</label>
+                <input type="password" id="password" name="password" v-model="password" class="form-control" placeholder="Digite a quantidade de estoque que o user possui" required>
+              </div>
+              <div class="form-group">
+                <label for="userCategoria">Tipo de Usuário</label>
+                <select id="role" name="role" v-model="role" class="form-control">
+                  <option value="Selecione a categoria" disabled>Selecione a categoria</option>
+                  <option value="admin">Administrador</option>
+                  <option value="waiter">Garçom</option>
+                </select>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="ingredienteQuantidade">Quantidade</label>
-              <input type="text" id="ingredienteQuantidade" name="quantidade" v-model="quantidade" class="form-control" placeholder="Digite a quantidade de estoque que o ingrediente possui" required>
-            </div>
-            <div class="form-group">
-              <label for="ingredienteCategoria">Categoria</label>
-              <select id="ingredienteCategoria" name="ingredienteCategoria" v-model="ingredienteCategoria" class="form-control">
-                <option value="Selecione a categoria" disabled>Selecione a categoria</option>
-                <option value="Pães">Pães</option>
-                <option value="Carnes">Carnes</option>
-                <option value="Opcionais">Opcionais</option>
-              </select>
-            </div>
-          </div>
+          </form>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="closeInsertModal">Cancelar</button>
-            <button type="button" class="btn btn-success" @click="insertIngrediente">Cadastrar Ingrediente</button>
+            <button type="submit" class="btn btn-success">Cadastrar Usuário</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Modal para editar ingrediente -->
+  <!-- Modal para editar user -->
   <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -79,15 +80,15 @@
         </div>
         <div class="modal-body" v-if="selectedIngrediente">
           <div class="form-group">
-            <label for="ingredienteTipo">Nome do Ingrediente</label>
-            <input type="text" class="form-control" id="ingredienteTipo" v-model="selectedIngrediente.tipo">
+            <label for="userTipo">Nome do Ingrediente</label>
+            <input type="text" class="form-control" id="userTipo" v-model="selectedIngrediente.tipo">
           </div>
           <div class="form-group">
-            <label for="ingredienteQuantidade">Quantidade</label>
-            <input type="text" class="form-control" id="ingredienteQuantidade" v-model="selectedIngrediente.quantidade">
+            <label for="userQuantidade">Quantidade</label>
+            <input type="text" class="form-control" id="userQuantidade" v-model="selectedIngrediente.quantidade">
           </div>
           <div class="form-group">
-            <label for="ingredienteCategoria">Categoria</label>
+            <label for="userCategoria">Categoria</label>
             <select class="form-control" v-model="selectedIngrediente.categoria">
               <option value="Pães">Pães</option>
               <option value="Carnes">Carnes</option>
@@ -130,31 +131,47 @@ export default {
   data() {
     return {
       isLoading: false,
-      ingredientes: [],
+      users: [],
       selectedIngrediente: [],
       dataTable: null,
-      ingredienteTipo: "",
-      quantidade: "",
-      ingredienteCategoria: ""
+      username: "",
+      password: "",
+      role: "",
+
     }
   },
   methods: {
+    async registerUser() {
+      try {
+        const response = await axios.post('https://api-burger-rho.vercel.app/register', {
+          username: this.username,
+          password: this.password,
+          role: this.role
+        });
+        // Handle successful registration (e.g., redirect to login page)
+        console.log('User registered:', response.data);
+        this.$router.push('/login'); // Redireciona para a página de login após registro
+      } catch (error) {
+        console.error('Error registering user:', error);
+        this.errorMessage = error.response.data.error || 'Erro ao registrar usuário';
+      }
+    },
     async getIngredientes() {
       this.isLoading = true;
       try {
-        const response = await axios.get("https://api-burger-rho.vercel.app/ingredients");
-        this.ingredientes = [
+        const response = await axios.get("https://api-burger-rho.vercel.app/users");
+        this.users = [
           ...response.data
         ];
         if (this.dataTable) {
-          this.dataTable.clear().rows.add(this.ingredientes).draw();
+          this.dataTable.clear().rows.add(this.users).draw();
         }
 
         this.$nextTick(() => {
           this.initializeDataTable();
         });
       } catch (error) {
-        console.error('Error fetching ingredientes:', error);
+        console.error('Error fetching users:', error);
         this.$swal({
           position: "center",
           icon: "error",
@@ -169,12 +186,12 @@ export default {
 
     async updateTable() {
       try {
-        const response = await axios.get("https://api-burger-rho.vercel.app/ingredients");
-        this.ingredientes = [
+        const response = await axios.get("https://api-burger-rho.vercel.app/users");
+        this.users = [
           ...response.data
         ];
       } catch (error) {
-        console.error('Error fetching ingredientes:', error);
+        console.error('Error fetching users:', error);
         this.$swal({
           position: "center",
           icon: "error",
@@ -189,15 +206,15 @@ export default {
       e.preventDefault();
 
       const data = {
-        tipo: this.ingredienteTipo,
+        tipo: this.userTipo,
         quantidade: this.quantidade,
-        categoria: this.ingredienteCategoria
+        categoria: this.userCategoria
       };
 
       try {
         console.log('Data to be sent:', data); // Loga os dados a serem enviados
 
-        const response = await axios.post("https://api-burger-rho.vercel.app/ingredients", data, {
+        const response = await axios.post("https://api-burger-rho.vercel.app/users", data, {
           headers: {"Content-Type": "application/json"}
         });
 
@@ -212,9 +229,9 @@ export default {
         });
 
         // Limpar campos
-        this.ingredienteTipo = "";
+        this.userTipo = "";
         this.quantidade = "";
-        this.ingredienteCategoria = "";
+        this.userCategoria = "";
 
         // Recarregar tabela
         await this.updateTable();
@@ -222,11 +239,11 @@ export default {
         // // Fechar modal
         // this.closeInsertModal();
       } catch (error) {
-        console.error('Error creating ingrediente:', error.response ? error.response.data : error); // Loga erro
+        console.error('Error creating user:', error.response ? error.response.data : error); // Loga erro
         this.$swal({
           position: "center",
           icon: "error",
-          title: "Erro ao cadastrar ingrediente!",
+          title: "Erro ao cadastrar user!",
           showConfirmButton: false,
           timer: 2000
         });
@@ -243,29 +260,29 @@ export default {
           categoria: this.selectedIngrediente.categoria
         };
         console.log([id, data]);
-        await axios.put(`https://api-burger-rho.vercel.app/ingredients/${id}`, data);
+        await axios.put(`https://api-burger-rho.vercel.app/users/${id}`, data);
         $('#editModal').modal('hide');
         this.$swal('Atualizado!', 'Ingrediente atualizado com sucesso!', 'success');
         await this.updateTable();
       } catch (error) {
-        console.error('Error updating ingrediente:', error);
+        console.error('Error updating user:', error);
       }
     },
 
     async deleteIngrediente(id) {
       this.$swal({
-        title: 'Você tem certeza que deseja excluir este ingrediente?',
+        title: 'Você tem certeza que deseja excluir este user?',
         text: 'Você não será capaz de reverter isso!',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#198754',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Sim, excluir ingrediente!',
+        confirmButtonText: 'Sim, excluir user!',
         cancelButtonText: 'Cancelar'
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await axios.delete(`https://api-burger-rho.vercel.app/ingredients/${id}`);
+            await axios.delete(`https://api-burger-rho.vercel.app/users/${id}`);
             this.$swal({
               position: "center",
               icon: "success",
@@ -277,7 +294,7 @@ export default {
 
             await this.updateTable();
           } catch (error) {
-            console.error('Error deleting ingrediente:', error);
+            console.error('Error deleting user:', error);
           }
         }
       });
@@ -293,8 +310,8 @@ export default {
       $('#insertModal').modal('hide');
     },
 
-    openEditModal(ingrediente) {
-      this.selectedIngrediente = {...ingrediente};
+    openEditModal(user) {
+      this.selectedIngrediente = {...user};
       $('#editModal').modal('show');
     },
 
@@ -307,7 +324,7 @@ export default {
         if (this.dataTable) {
           this.dataTable.destroy();
         }
-        this.dataTable = $('#ingredientes-table').DataTable({
+        this.dataTable = $('#users-table').DataTable({
           paging: true,
           searching: true,
           lengthMenu: [10, 20, 30, 40, 50, 100],

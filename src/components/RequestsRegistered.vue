@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="card shadow p-5" v-if="!isLoading">
-      <table id="burger-table" class="table table-striped table-bordered">
+      <table id="request-table" class="table table-striped table-bordered">
         <thead>
         <tr>
           <th>ID</th>
@@ -21,24 +21,24 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="burger in burgers" :key="burger.id">
-          <td>{{ burger.id }}</td>
-          <td>{{ burger.nome }}</td>
-          <td>{{ burger.pao }}</td>
-          <td>{{ burger.carne }}</td>
+        <tr v-for="request in requests" :key="request.id">
+          <td>{{ request.id }}</td>
+          <td>{{ request.nome }}</td>
+          <td>{{ request.pao }}</td>
+          <td>{{ request.carne }}</td>
           <td>
             <ul>
-              <li v-for="(opcional, index) in burger.opcionais" :key="index">{{ opcional }}</li>
+              <li v-for="(opcional, index) in request.opcionais" :key="index">{{ opcional }}</li>
             </ul>
           </td>
-          <td>{{ burger.dataHora }}</td>
+          <td>{{ request.dataHora }}</td>
           <td style="text-align: center; ">
-            <select name="status" class="status" @change="updateBurger($event, burger.id)">
-              <option :value="s.tipo" v-for="s in status" :key="s.id" :selected="burger.status == s.tipo">
+            <select name="status" class="status" @change="updateBurger($event, request.id)">
+              <option :value="s.tipo" v-for="s in status" :key="s.id" :selected="request.status == s.tipo">
                 {{ s.tipo }}
               </option>
             </select>
-            <button class="delete-btn" @click="deleteBurger(burger.id)">Cancelar</button>
+            <button class="delete-btn" @click="deleteBurger(request.id)">Cancelar</button>
           </td>
         </tr>
         </tbody>
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      burgers: [],
+      requests: [],
       status: [],
       dataTable: null,
     }
@@ -78,20 +78,20 @@ export default {
     async getPedidos() {
       this.isLoading = true;
       try {
-        const response = await axios.get("https://api-burger-rho.vercel.app/burgers");
-        this.burgers = response.data.map(burger => ({
-          ...burger,
-          dataHora: burger.dataHora || 'N/A'
+        const response = await axios.get("https://api-burger-rho.vercel.app/requests");
+        this.requests = response.data.map(request => ({
+          ...request,
+          dataHora: request.dataHora || 'N/A'
         }));
         await this.getStatus();
         if (this.dataTable) {
-          this.dataTable.clear().rows.add(this.burgers).draw();
+          this.dataTable.clear().rows.add(this.requests).draw();
         }
         this.$nextTick(() => {
           this.initializeDataTable();
         });
       } catch (error) {
-        console.error('Error fetching burgers:', error);
+        console.error('Error fetching requests:', error);
         this.$swal({
           position: "center",
           icon: "error",
@@ -118,10 +118,10 @@ export default {
       const data = { status: option };
 
       try {
-        const response = await axios.put(`https://api-burger-rho.vercel.app/burgers/${id}`, data);
+        const response = await axios.put(`https://api-burger-rho.vercel.app/requests/${id}`, data);
         console.log(response.data);
       } catch (error) {
-        console.error('Error updating burger:', error);
+        console.error('Error updating request:', error);
       }
     },
 
@@ -138,7 +138,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            await axios.delete(`https://api-burger-rho.vercel.app/burgers/${id}`);
+            await axios.delete(`https://api-burger-rho.vercel.app/requests/${id}`);
             this.$swal({
               position: "center",
               icon: "success",
@@ -149,7 +149,7 @@ export default {
             });
             await this.getPedidos();
           } catch (error) {
-            console.error('Error deleting burger:', error);
+            console.error('Error deleting request:', error);
           }
         }
       });
@@ -159,7 +159,7 @@ export default {
         if (this.dataTable) {
           this.dataTable.destroy();
         }
-        this.dataTable = $('#burger-table').DataTable({
+        this.dataTable = $('#request-table').DataTable({
           paging: true,
           searching: true,
           lengthMenu: [10, 20, 30, 40, 50, 100],
