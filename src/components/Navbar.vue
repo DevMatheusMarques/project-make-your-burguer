@@ -10,12 +10,12 @@
         <img src="/icons/ingredientes.svg" alt="Icone Ingredientes" class="icon">
         <span class="link-text">Ingredientes</span>
       </router-link>
-      <router-link v-if="isAuthenticated && isAdmin" to="/pedidos" class="router-link">
+      <router-link v-if="isAuthenticated && isAdmin" to="/personOrders" class="router-link">
         <img src="/icons/burger-solid.svg" alt="Icone Burguer" class="icon">
         <span class="link-text">Pedidos</span>
       </router-link>
       <router-link v-if="isAuthenticated && isAdmin" to="/users" class="router-link">
-        <img src="/icons/burger-solid.svg" alt="Icone Users" class="icon">
+        <img src="/icons/users-solid.svg" alt="Icone Users" class="icon">
         <span class="link-text">Usuários</span>
       </router-link>
       <router-link v-if="isAuthenticated && (isAdmin || isWaiter)" to="/cardapio" class="router-link">

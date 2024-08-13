@@ -65,7 +65,7 @@ export default {
           timer: 2500,
         });
 
-        this.$router.push('/pedidos');
+        this.$router.push('/dashboard');
       } catch (error) {
         this.$swal({
           position: "center",

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Pedidos from "@/views/Pedidos.vue";
+import PersonOrders from "@/views/PersonOrders.vue";
 import Ingredientes from "@/views/Ingredientes.vue";
 import Cardapio from "@/views/Cardapio.vue";
 import Login from "@/views/Login.vue";
@@ -32,9 +32,9 @@ const routes = [
     meta: { requiresAuth: true, roles: ['admin'] }
   },
   {
-    path: '/pedidos',
-    name: 'Pedidos',
-    component: Pedidos,
+    path: '/personOrders',
+    name: 'PersonOrders',
+    component: PersonOrders,
     meta: { requiresAuth: true, roles: ['admin'] }
   },
   {

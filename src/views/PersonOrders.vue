@@ -12,7 +12,7 @@ import RequestsRegistered from "@/components/RequestsRegistered.vue";
 import Navbar from "@/components/Navbar.vue";
 
 export default {
-  name: 'Pedidos',
+  name: 'InPersonOrders',
   data: function() {
     return {
       logo_src: "/img/logo.png",
