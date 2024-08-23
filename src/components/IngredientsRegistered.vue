@@ -146,9 +146,6 @@ export default {
         this.ingredientes = [
           ...response.data
         ];
-        if (this.dataTable) {
-          this.dataTable.clear().rows.add(this.ingredientes).draw();
-        }
 
         this.$nextTick(() => {
           this.initializeDataTable();
@@ -164,24 +161,6 @@ export default {
         });
       } finally {
         this.isLoading = false;
-      }
-    },
-
-    async updateTable() {
-      try {
-        const response = await axios.get("https://api-burger-rho.vercel.app/ingredients");
-        this.ingredientes = [
-          ...response.data
-        ];
-      } catch (error) {
-        console.error('Error fetching ingredientes:', error);
-        this.$swal({
-          position: "center",
-          icon: "error",
-          title: "Falha ao acessar dados!",
-          showConfirmButton: false,
-          timer: 1500
-        });
       }
     },
 
@@ -201,7 +180,7 @@ export default {
           headers: {"Content-Type": "application/json"}
         });
 
-        console.log('Response data:', response.data); // Loga a resposta recebida
+        console.log('Response data:', response); // Loga a resposta recebida
 
         this.$swal({
           position: "center",
@@ -212,15 +191,31 @@ export default {
         });
 
         // Limpar campos
-        this.ingredienteTipo = "";
-        this.quantidade = "";
-        this.ingredienteCategoria = "";
+        this.clearInputs();
+
+        if (response.status === 201) {
+          setTimeout(() => {
+            this.$swal({
+              title: 'Deseja cadastrar um novo ingrediente?',
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonColor: '#198754',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Sim, cadastrar novo ingrediente!',
+              cancelButtonText: 'Não, apenas este!'
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                  this.clearInputs();
+              } else {
+                this.closeInsertModal();
+              }
+            });
+          }, 2500);
+        }
 
         // Recarregar tabela
-        await this.updateTable();
+        // await this.getIngredientes();
 
-        // // Fechar modal
-        // this.closeInsertModal();
       } catch (error) {
         console.error('Error creating ingrediente:', error.response ? error.response.data : error); // Loga erro
         this.$swal({
@@ -246,7 +241,7 @@ export default {
         await axios.put(`https://api-burger-rho.vercel.app/ingredients/${id}`, data);
         $('#editModal').modal('hide');
         this.$swal('Atualizado!', 'Ingrediente atualizado com sucesso!', 'success');
-        await this.updateTable();
+        await this.getIngredientes();
       } catch (error) {
         console.error('Error updating ingrediente:', error);
       }
@@ -275,7 +270,7 @@ export default {
               timer: 2000
             });
 
-            await this.updateTable();
+            await this.getIngredientes();
           } catch (error) {
             console.error('Error deleting ingrediente:', error);
           }
@@ -300,6 +295,12 @@ export default {
 
     closeEditModal() {
       $('#editModal').modal('hide');
+    },
+
+    clearInputs() {
+      this.ingredienteTipo = "";
+      this.quantidade = "";
+      this.ingredienteCategoria = "";
     },
 
     initializeDataTable() {
